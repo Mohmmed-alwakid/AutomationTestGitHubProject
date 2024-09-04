@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="GitHub Test Suite">
+    <test name="Login Tests">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="GithubWeb.GithubWeb"/>
+        </classes>
+    </test>
+    <test name="HomePage Tests">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="GithubWeb.HomePageTest"/>
+        </classes>
+    </test>
+</suite>

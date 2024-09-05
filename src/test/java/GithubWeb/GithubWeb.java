@@ -2,6 +2,7 @@ package GithubWeb;
 
 import Base.BaseClass;
 import Pages.LoginPages;
+import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -9,6 +10,12 @@ import org.testng.annotations.Test;
 public class GithubWeb extends BaseClass {
 
     @Test
+    @Epic("Authentication")
+    @Feature("Login Feature")
+    @Story("User shel login to account")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("MohmmedAlwakid")
+    @Description("This is a method to verify that Login URL is valid")
     public void testOpenLoginPage() {
         LoginPages loginPage = new LoginPages(driver);
         loginPage.openUrl();

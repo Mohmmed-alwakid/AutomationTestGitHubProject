@@ -1,7 +1,6 @@
 package Pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,16 +23,18 @@ public class LoginPages {
         driver.get(ConfigReader.getProperty("base.url"));
     }
 
-    public void enterUsername(String username) {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(USERNAME_FIELD));
+    private void enterText(By locator, String text) {
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         element.clear();
-        element.sendKeys(username);
+        element.sendKeys(text);
+    }
+
+    public void enterUsername(String username) {
+        enterText(USERNAME_FIELD, username);
     }
 
     public void enterPassword(String password) {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(PASSWORD_FIELD));
-        element.clear();
-        element.sendKeys(password);
+        enterText(PASSWORD_FIELD, password);
     }
 
     public void clickSignIn() {
@@ -41,15 +42,11 @@ public class LoginPages {
     }
 
     public boolean isLoginPageDisplayed() {
-        return wait.until(ExpectedConditions.urlContains("base.url"));
+        return wait.until(ExpectedConditions.urlContains(ConfigReader.getProperty("base.url")));
     }
 
     public boolean isErrorMessageDisplayed() {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(ERROR_MESSAGE)).isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+        return isElementDisplayed(ERROR_MESSAGE);
     }
 
     public void login(String username, String password) {
@@ -59,22 +56,20 @@ public class LoginPages {
     }
 
     public void loginWithInvalidCredentials() {
-        String username = ConfigReader.getProperty("invalid.username");
-        String password = ConfigReader.getProperty("invalid.password");
-        login(username, password);
+        login(ConfigReader.getProperty("invalid.username"), ConfigReader.getProperty("invalid.password"));
     }
 
     public void loginWithValidCredentials() {
-        String username = ConfigReader.getProperty("valid.username");
-        String password = ConfigReader.getProperty("valid.password");
-        login(username, password);
+        login(ConfigReader.getProperty("valid.username"), ConfigReader.getProperty("valid.password"));
     }
 
     public boolean isLoginSuccessful() {
+        return isElementDisplayed(DASHBOARD_LOCATOR);
+    }
+
+    private boolean isElementDisplayed(By locator) {
         try {
-            // Wait for the Dashboard element to be visible
-            WebElement dashboardElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DASHBOARD_LOCATOR));
-            return dashboardElement.isDisplayed();
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).isDisplayed();
         } catch (Exception e) {
             return false;
         }
